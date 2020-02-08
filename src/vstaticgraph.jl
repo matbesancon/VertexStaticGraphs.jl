@@ -1,4 +1,19 @@
 
+"""
+    VStaticGraph{T,N,D}
+
+`LightGraphs.AbstractGraph` with fixed-number of vertices and varying number of edges.
+The adjacency list is stored using an `SVector`.
+
+`T` is the integer type, `N` the number of vertices, `D` is the directedness.
+
+## Examples
+
+```julia
+julia> g = VStaticGraph{Int,6,false}()
+julia> g2 = VStaticGraph{Int}(Val{6}())
+```
+"""
 mutable struct VStaticGraph{T,N,D,BT <: Union{SVector{N, Vector{T}},Nothing}} <: LG.AbstractSimpleGraph{T}
     ne::Int
     fadjlist::SVector{N, Vector{T}} # [src]: (dst, dst, dst)
@@ -26,6 +41,14 @@ function VStaticGraph{T}(::Val{N}) where {T,N}
     return VStaticGraph{T,N,false}()
 end
 
+function VStaticGraph(::Val{N}) where {N}
+    return VStaticGraph{Int,N,false}()
+end
+
 function VStaticGraph{T}(::Val{N}, ::Val{D}) where {T,N,D}
     return VStaticGraph{T,N,D}()
+end
+
+function VStaticGraph(::Val{N}, ::Val{D}) where {N,D}
+    return VStaticGraph{Int,N,D}()
 end

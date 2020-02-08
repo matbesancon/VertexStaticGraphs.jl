@@ -11,10 +11,12 @@ LG.edgetype(::VStaticGraph{T}) where {T} = LG.SimpleEdge{T}
 
 Base.eltype(::VStaticGraph{T}) where {T} = T
 
-LG.has_vertex(g::VStaticGraph, v) = v in LG.vertices(g)
+function LG.has_edge(g::VStaticGraph, e::LG.AbstractEdge)
+    LG.has_edge(g, LG.src(e), LG.dst(e))
+end
 
 function LG.has_edge(g::VStaticGraph{T,N,false}, s, d) where {T,N}
-    verts = vertices(g)
+    verts = LG.vertices(g)
     (s in verts && d in verts) || return false # edge out of bounds
     @inbounds list_s = g.fadjlist[s]
     @inbounds list_d = g.fadjlist[d]
@@ -26,20 +28,20 @@ function LG.has_edge(g::VStaticGraph{T,N,false}, s, d) where {T,N}
 end
 
 function LG.has_edge(g::VStaticGraph{T,N,true}, s, d) where {T,N}
-    verts = vertices(g)
+    verts = LG.vertices(g)
     (s in verts && d in verts) || return false  # edge out of bounds
     @inbounds list = g.fadjlist[s]
     return LG.insorted(d, list)
 end
 
-function LG.outneighbors(g::VStaticGraph{T,N}, v) where {T,N}
+function LG.outneighbors(g::VStaticGraph{T,N}, v::Integer) where {T,N}
     @boundscheck v in LG.vertices(g) || return T[]
     flist = fadj(g)
     @inbounds list = flist[v]
     return list
 end
 
-function LG.inneighbors(g::VStaticGraph{T,N}, v) where {T,N}
+function LG.inneighbors(g::VStaticGraph{T,N}, v::Integer) where {T,N}
     @boundscheck v in LG.vertices(g) || return T[]
     blist = badj(g)
     @inbounds list = blist[v]

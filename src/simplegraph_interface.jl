@@ -26,14 +26,16 @@ function LG.add_edge!(g::VStaticGraph{T,N}, s, d) where {T,N}
     return true  # edge successfully added
 end
 
-function LG.rem_edge!(g::VStaticGraph{T,N}, s, d) where {T,N}
+function LG.rem_edge!(g::VStaticGraph{T,N}, e) where {T,N}
+    s = LG.src(e)
+    d = LG.dst(e)
     LG.has_vertex(g, s) || return false
     LG.has_vertex(g, d) || return false
     flist = fadj(g)
     @inbounds list = flist[s]
     index = searchsortedfirst(list, d)
     @inbounds (index <= length(list) && list[index] == d) || return false   # edge not in graph
-    
+
     deleteat!(list, index)
 
     g.ne -= 1
