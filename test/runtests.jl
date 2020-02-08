@@ -1,8 +1,12 @@
-using VertexStaticGraphs
+using VertexStaticGraphs: VStaticGraph
+
 using Test
+import Random
+
 using LightGraphs
-import LightGraphs.SimpleGraphs: SimpleEdge
 const LG = LightGraphs
+import LightGraphs.SimpleGraphs: SimpleEdge
+
 
 @testset "VStaticGraph constructor" begin
     g = VStaticGraph{Int,6,false}()
@@ -80,9 +84,6 @@ end
     @test Edge(2, 1) in edges(g)
     @test !in(Edge(3, 1), edges(dg))
 end
-
-
-import Random
 
 @testset "SimpleGraphs test suite" begin
     @testset "collection operations" begin
