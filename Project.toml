@@ -3,6 +3,10 @@ uuid = "a8a3067e-64b6-499f-bd10-04d825e81560"
 authors = ["Mathieu Besançon"]
 version = "0.1.0"
 
+[deps]
+LightGraphs = "093fc24a-ae57-5d10-9952-331d41423f4d"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
 [compat]
 julia = "1"
 
